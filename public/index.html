@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Inventory System</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      color: #222;
+    }
+
+    table {
+      background-color: white;
+    }
+
+    .low-stock {
+      color: red;
+      font-weight: bold;
+    }
+
+    input {
+      padding: 5px;
+    }
+
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <center>
+    <h2>🧾 Product Inventory System</h2>
+  </center>
+
+  <!-- ADD ITEM -->
+  <table border="1" cellpadding="10" cellspacing="0" width="60%" align="center">
+    <tr>
+      <th colspan="2" bgcolor="#e0e0e0">Add Item</th>
+    </tr>
+
+    <tr>
+      <td align="right"><b>Item Name:</b></td>
+      <td>
+        <input type="text" id="itemName" placeholder="Enter item name" size="40">
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right"><b>Quantity:</b></td>
+      <td>
+        <input type="number" id="quantity" placeholder="Enter quantity" size="40">
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2" align="center">
+        <button onclick="addItem()">Add to Inventory</button>
+      </td>
+    </tr>
+  </table>
+
+  <br>
+
+  <!-- INVENTORY LIST -->
+  <table border="1" cellpadding="10" cellspacing="0" width="60%" align="center">
+    <tr>
+      <th bgcolor="#e0e0e0">Inventory List</th>
+    </tr>
+
+    <tr>
+      <td>
+        <div id="list"></div>
+      </td>
+    </tr>
+  </table>
+
+  <script src="app.js"></script>
+</body>
+</html>
