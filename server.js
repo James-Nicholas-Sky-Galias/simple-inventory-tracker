@@ -45,6 +45,7 @@ app.post('/api/inventory', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 //search by id
 app.put('/api/inventoryUpdate/:id', async (req, res) => {
   try {
