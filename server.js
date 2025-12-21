@@ -46,32 +46,56 @@ app.post('/api/inventory', async (req, res) => {
   }
 });
 //search by id
-app.get('/api/inventoryItem/:id', async (req, res) => {
-    try {
-        const {id} = req.params;
-        const item = await Inventory.findById(id);
-        res.status(200).json(item);
-    } catch (error) {
-        res.status(500).json({message: error.message});
+app.put('/api/inventoryUpdate/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedItem = await Inventory.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedItem) {
+      return res.status(404).json({ message: `Cannot find item with ID ${id}` });
     }
+
+    res.status(200).json(updatedItem);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 //update inventory item by id
-app.put('/api/inventoryUpdate/:id', async (req, res) => {
-    try {
-        const {id} = req.params;
-        const item = await Inventory.findByIdAndUpdate(id, req.body);
+async function updateItem(id) {
 
-        if (!item) {
-            return res.status(404).json({message: `Cannot find item with ID ${id}`});
-        }
+  const updatedName = document.getElementById(`name-${id}`).value;
+  const updatedQty = Number(document.getElementById(`qty-${id}`).value); // force number
 
-        const updatedItem = await Inventory.findById(id);
-        res.status(200).json(updatedItem);
-    } catch (error) {
-        res.status(500).json({message: error.message});
-    }
-});
+  let updateData = {};
+
+  if (updateChoice === "1" || updateChoice === "3") {
+    updateData.itemName = updatedName;
+  }
+
+  if (updateChoice === "2" || updateChoice === "3") {
+    updateData.quantity = updatedQty; // ensure numeric
+  }
+
+  const response = await fetch(`/api/inventoryUpdate/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updateData)
+  });
+
+  if (response.ok) {
+    alert("Item updated successfully!");
+    loadItems();
+  } else {
+    const error = await response.json();
+    alert("Update failed: " + error.message);
+  }
+}
 
 //delete inventory item by id
 app.delete('/api/inventoryDelete/:id', async (req, res) => {
