@@ -31,6 +31,50 @@
   </style>
 </head>
 
+<div id="updateModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4);">
+  <div style="background:white; width:400px; margin:10% auto; padding:20px;">
+    <h3>Update Item</h3>
+
+    <input type="hidden" id="updateId">
+
+    <label>
+      <input type="radio" name="updateChoice" value="1"> Item Name
+    </label><br>
+
+    <label>
+      <input type="radio" name="updateChoice" value="2"> Quantity
+    </label><br>
+
+    <label>
+      <input type="radio" name="updateChoice" value="3" checked> Both
+    </label>
+
+    <br><br>
+
+    <label>Item Name:</label><br>
+    <input type="text" id="updateName" style="width:100%;" placeholder="Insert new name here"><br><br>
+
+    <label>Quantity:</label><br>
+    <input type="number" id="updateQty" style="width:100%;" placeholder="Insert new quantity here"><br><br>
+
+    <button onclick="confirmUpdate()">Save</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<div id="deleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4);">
+  <div style="background:white; width:400px; margin:15% auto; padding:20px;">
+    <h3 style="color:red;">Delete Item</h3>
+
+    <input type="hidden" id="deleteId">
+
+    <p id="deleteMessage"></p>
+
+    <button style="background:red; color:white;" onclick="confirmDelete()">Delete</button>
+    <button onclick="closeDeleteModal()">Cancel</button>
+  </div>
+</div>
+
 <body>
   <center>
     <h2>🧾 Product Inventory System</h2>

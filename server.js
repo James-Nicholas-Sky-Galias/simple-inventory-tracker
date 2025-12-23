@@ -68,39 +68,26 @@ app.put('/api/inventoryUpdate/:id', async (req, res) => {
 });
 
 //update inventory item by id
-async function updateItem(id) {
+app.put('/api/inventoryUpdate/:id', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const item = await Inventory.findByIdAndUpdate(id, req.body);
 
-  const updatedName = document.getElementById(`name-${id}`).value;
-  const updatedQty = Number(document.getElementById(`qty-${id}`).value); // force number
+        if (!item) {
+            return res.status(404).json({message: `Cannot find item with ID ${id}`});
+        }
 
-  let updateData = {};
-
-  if (updateChoice === "1" || updateChoice === "3") {
-    updateData.itemName = updatedName;
-  }
-
-  if (updateChoice === "2" || updateChoice === "3") {
-    updateData.quantity = updatedQty; // ensure numeric
-  }
-
-  const response = await fetch(`/api/inventoryUpdate/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updateData)
-  });
-
-  if (response.ok) {
-    alert("Item updated successfully!");
-    loadItems();
-  } else {
-    const error = await response.json();
-    alert("Update failed: " + error.message);
-  }
-}
+        const updatedItem = await Inventory.findById(id);
+        res.status(200).json(updatedItem);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+});
 
 //delete inventory item by id
 app.delete('/api/inventoryDelete/:id', async (req, res) => {
     try {
+        console.log("DELETE request received:", req.params.id);
         const {id} = req.params;
         const item = await Inventory.findByIdAndDelete(id);
 
