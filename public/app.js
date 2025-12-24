@@ -80,7 +80,29 @@ function updateItem(id, name, qty) {
   document.getElementById("updateName").value = name || "";
   document.getElementById("updateQty").value = qty;
 
+  // Reset to "Both" and show all fields
+  document.querySelector('input[name="updateChoice"][value="3"]').checked = true;
+  toggleUpdateFields();
+
   document.getElementById("updateModal").style.display = "block";
+}
+
+function toggleUpdateFields() {
+  const choice = document.querySelector('input[name="updateChoice"]:checked').value;
+  const nameFieldContainer = document.getElementById("nameFieldContainer");
+  const qtyFieldContainer = document.getElementById("qtyFieldContainer");
+
+  // Hide all fields first
+  nameFieldContainer.style.display = "none";
+  qtyFieldContainer.style.display = "none";
+
+  // Show fields based on choice
+  if (choice === "1" || choice === "3") {
+    nameFieldContainer.style.display = "block";
+  }
+  if (choice === "2" || choice === "3") {
+    qtyFieldContainer.style.display = "block";
+  }
 }
 
 async function confirmUpdate() {

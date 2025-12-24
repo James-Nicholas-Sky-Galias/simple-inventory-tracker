@@ -4,58 +4,138 @@
   <meta charset="UTF-8">
   <title>Product Inventory System</title>
 
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
+    :root{
+      --pink-1:#ffc0e3;
+      --pink-2:#ffb3d9;
+      --pink-3:#ff99cc;
+      --pink-4:#ff80bf;
+      --pink-5:#ff66b2;
+    }
+
+    *{box-sizing:border-box}
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
-      color: #222;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--pink-1) 0%, var(--pink-2) 25%, var(--pink-3) 50%, var(--pink-4) 75%, var(--pink-5) 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 28px 20px;
+      color: #333;
+    }
+
+    h2 {
+      font-family: 'Quicksand', sans-serif;
+      color: #fff;
+      font-size: 2.2rem;
+      margin: 8px 0 20px;
+      text-align: center;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
 
     table {
-      background-color: white;
+      width: 60%;
+      margin: 12px auto;
+      background-color: #fff;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    th, td{padding:12px 16px}
+
+    th[bgcolor], th{
+      background: linear-gradient(135deg, var(--pink-4), var(--pink-5));
+      color: #fff;
+      font-family: 'Quicksand', sans-serif;
+      font-weight:700;
     }
 
     .low-stock {
-      color: red;
-      font-weight: bold;
+      color: #c62b6a;
+      font-weight: 700;
     }
 
-    input {
-      padding: 5px;
+    input[type="text"], input[type="number"]{
+      width:100%;
+      padding:10px 12px;
+      border:2px solid #ffd6ea;
+      border-radius:8px;
+      font-family:inherit;
+      font-size:0.95rem;
     }
 
-    button {
-      padding: 5px 10px;
-      cursor: pointer;
+    input:focus{outline:none;border-color:var(--pink-5);box-shadow:0 6px 18px rgba(255,102,178,0.18)}
+
+    button{
+      background: linear-gradient(135deg, var(--pink-4), var(--pink-5));
+      color:#fff;
+      border:none;
+      padding:10px 16px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
     }
+
+    button[style*="background:red"]{background:linear-gradient(135deg,#d63384,#b8297f)}
+
+    /* modal backdrop */
+    #updateModal, #deleteModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.35);}
+
+    /* modal box */
+    #updateModal > div, #deleteModal > div{
+      width:420px;
+      max-width:92%;
+      margin:8% auto;
+      background: linear-gradient(180deg, var(--pink-3), #ffffff);
+      padding:20px;
+      border-radius:14px;
+      box-shadow:0 18px 40px rgba(0,0,0,0.18);
+      color: #222;
+    }
+
+    #updateModal h3, #deleteModal h3{
+      margin-top:0;
+      color: var(--pink-5);
+    }
+
+    center{display:block;margin-bottom:6px}
   </style>
 </head>
 
 <div id="updateModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4);">
-  <div style="background:white; width:400px; margin:10% auto; padding:20px;">
+  <div style="background:white; width:400px; margin:10% auto; padding:20px; border-radius:10px;">
     <h3>Update Item</h3>
 
     <input type="hidden" id="updateId">
 
     <label>
-      <input type="radio" name="updateChoice" value="1"> Item Name
+      <input type="radio" name="updateChoice" value="1" onchange="toggleUpdateFields()"> Item Name
     </label><br>
 
     <label>
-      <input type="radio" name="updateChoice" value="2"> Quantity
+      <input type="radio" name="updateChoice" value="2" onchange="toggleUpdateFields()"> Quantity
     </label><br>
 
     <label>
-      <input type="radio" name="updateChoice" value="3" checked> Both
+      <input type="radio" name="updateChoice" value="3" checked onchange="toggleUpdateFields()"> Both
     </label>
 
     <br><br>
 
-    <label>Item Name:</label><br>
-    <input type="text" id="updateName" style="width:100%;" placeholder="Insert new name here"><br><br>
+    <div id="nameFieldContainer" style="display:block;">
+      <label>Item Name:</label><br>
+      <input type="text" id="updateName" style="width:100%;" placeholder="Insert new name here"><br><br>
+    </div>
 
-    <label>Quantity:</label><br>
-    <input type="number" id="updateQty" style="width:100%;" placeholder="Insert new quantity here"><br><br>
+    <div id="qtyFieldContainer" style="display:block;">
+      <label>Quantity:</label><br>
+      <input type="number" id="updateQty" style="width:100%;" placeholder="Insert new quantity here"><br><br>
+    </div>
 
     <button onclick="confirmUpdate()">Save</button>
     <button onclick="closeModal()">Cancel</button>
@@ -63,8 +143,8 @@
 </div>
 
 <div id="deleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4);">
-  <div style="background:white; width:400px; margin:15% auto; padding:20px;">
-    <h3 style="color:red;">Delete Item</h3>
+  <div style="background:white; width:400px; margin:15% auto; padding:20px; border-radius:10px;">
+    <h3>Delete Item</h3>
 
     <input type="hidden" id="deleteId">
 
@@ -77,7 +157,7 @@
 
 <body>
   <center>
-    <h2>🧾 Product Inventory System</h2>
+    <h2>Product Inventory System</h2>
   </center>
 
   <!-- ADD ITEM -->
